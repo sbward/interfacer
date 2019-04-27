@@ -8,7 +8,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/rjeczalik/interfaces"
+	"github.com/sbward/interfaces"
 )
 
 var (

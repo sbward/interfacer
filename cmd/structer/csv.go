@@ -4,7 +4,7 @@ import (
 	"encoding/csv"
 	"io"
 
-	"github.com/rjeczalik/interfaces"
+	"github.com/sbward/interfaces"
 )
 
 func init() {

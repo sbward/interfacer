@@ -12,7 +12,7 @@ import (
 	"text/template"
 	"unicode"
 
-	"github.com/rjeczalik/interfaces"
+	"github.com/sbward/interfaces"
 )
 
 var (

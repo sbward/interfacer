@@ -3,7 +3,7 @@ package interfaces_test
 import (
 	"testing"
 
-	"github.com/rjeczalik/interfaces"
+	"github.com/sbward/interfaces"
 )
 
 func TestParseQuery(t *testing.T) {
@@ -12,8 +12,8 @@ func TestParseQuery(t *testing.T) {
 			Package:  "os",
 			TypeName: "File",
 		},
-		`github.com/rjeczalik/interfaces.Query`: {
-			Package:  "github.com/rjeczalik/interfaces",
+		`github.com/sbward/interfaces.Query`: {
+			Package:  "github.com/sbward/interfaces",
 			TypeName: "Query",
 		},
 	}
