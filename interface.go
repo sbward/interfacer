@@ -131,10 +131,15 @@ func buildInterfaceForPkg(pkg *loader.PackageInfo, opts *Options) (Interface, er
 		}
 		ins := sig.Params()
 		outs := sig.Results()
+
+		qf := func(pkg *types.Package) string {
+			return pkg.Name()
+		}
+
 		fn := Func{
-			Name: method.Name(),
-			Ins:  make([]Type, ins.Len()),
-			Outs: make([]Type, outs.Len()),
+			Definition: method.Name() + types.TypeString(sig, qf)[4:],
+			Ins:        make([]Type, ins.Len()),
+			Outs:       make([]Type, outs.Len()),
 		}
 		for i := range fn.Ins {
 			fn.Ins[i] = newType(ins.At(i))
@@ -144,6 +149,7 @@ func buildInterfaceForPkg(pkg *loader.PackageInfo, opts *Options) (Interface, er
 			fn.Outs[i] = newType(outs.At(i))
 			fixup(&fn.Outs[i], opts.Query)
 		}
+
 		inter = append(inter, fn)
 	}
 	if len(inter) == 0 {

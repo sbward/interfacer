@@ -15,15 +15,19 @@ type Type struct {
 	IsPointer   bool   `json:"isPointer,omitempty"`   // whether the parameter is a pointer
 	IsComposite bool   `json:"isComposite,omitempty"` // whether the type is map, slice, chan or array
 	IsFunc      bool   `json:"isFunc,omitempty"`      // whether the type if function
+	IsVariadic  bool   `json:"isVariadic,omitempty"`  // whether the type uses "...T"
 }
 
 // String gives Go code representation of the type.
 func (typ Type) String() (s string) {
+	if typ.IsVariadic {
+		s = "..."
+	}
 	if typ.IsPointer {
-		s = "*"
+		s += "*"
 	}
 	if !typ.IsComposite && typ.Package != "" {
-		s = s + typ.Package + "."
+		s += typ.Package + "."
 	}
 	return s + typ.Name
 }
@@ -56,6 +60,7 @@ func (typ *Type) setFromType(t types.Type, depth int, orig types.Type) {
 		typ.setFromNamed(t)
 	case *types.Signature:
 		typ.IsFunc = true
+		typ.IsVariadic = t.Variadic()
 		typ.setFromSignature(t)
 	case *types.Pointer:
 		if depth == 0 {

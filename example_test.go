@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/rjeczalik/interfaces"
+	"github.com/sbward/interfaces"
 )
 
 type ExampleFoo int
@@ -35,8 +35,10 @@ func (ExampleBaz) D(*map[interface{}]struct{}, interface{}) (chan struct{}, []in
 
 func (*ExampleBaz) E(*[]map[*flag.FlagSet]struct{}, [3]string) {}
 
+func (*ExampleBaz) F(bool, ...string) {}
+
 func ExampleNew() {
-	i, err := interfaces.New(`github.com/rjeczalik/interfaces.ExampleBaz`)
+	i, err := interfaces.New(`github.com/sbward/interfaces.ExampleBaz`)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -55,10 +57,11 @@ func ExampleNew() {
 	// C(map[string]int, *interfaces.Options, *http.Client) (chan []string, error)
 	// D(*map[interface{}]struct{}, interface{}) (chan struct{}, []interface{})
 	// E(*[]map[*flag.FlagSet]struct{}, [3]string)
+	// F(bool, ...string)
 	// Dependencies:
 	// flag
-	// github.com/rjeczalik/interfaces
-	// github.com/rjeczalik/interfaces_test
+	// github.com/sbward/interfaces
+	// github.com/sbward/interfaces_test
 	// io
 	// net/http
 }
@@ -92,8 +95,8 @@ func ExampleNewWithOptions() {
 
 func ExampleFunc_String() {
 	f := interfaces.Func{
-		Name: "Close",
-		Outs: []interfaces.Type{{Name: "error"}},
+		Definition: "Close() error",
+		Outs:       []interfaces.Type{{Name: "error"}},
 	}
 	fmt.Println(f)
 	// Output: Close() error

@@ -1,40 +1,19 @@
 package interfaces
 
 import (
-	"bytes"
-	"fmt"
 	"sort"
 )
 
 // Func represents an interface function.
 type Func struct {
-	Name string `json:"name,omitempty"` // name of the function
-	Ins  []Type `json:"ins,omitempty"`  // input parameters
-	Outs []Type `json:"outs,omitempty"` // output parameters
+	Definition string `json:"definition,omitempty"` // Go code representation of the function
+	Ins        []Type `json:"ins,omitempty"`        // input parameters
+	Outs       []Type `json:"outs,omitempty"`       // output parameters
 }
 
 // String gives Go code representation of the function.
 func (f Func) String() string {
-	var buf bytes.Buffer
-	if len(f.Ins) == 0 {
-		fmt.Fprintf(&buf, "%s()", f.Name)
-	} else {
-		fmt.Fprintf(&buf, "%s(%s", f.Name, f.Ins[0])
-		for _, typ := range f.Ins[1:] {
-			fmt.Fprintf(&buf, ", %s", typ)
-		}
-		buf.WriteString(")")
-	}
-	if len(f.Outs) == 1 {
-		fmt.Fprintf(&buf, " %s", f.Outs[0])
-	} else if len(f.Outs) > 1 {
-		fmt.Fprintf(&buf, " (%s", f.Outs[0])
-		for _, typ := range f.Outs[1:] {
-			fmt.Fprintf(&buf, ", %s", typ)
-		}
-		buf.WriteString(")")
-	}
-	return buf.String()
+	return f.Definition
 }
 
 // Deps gives a list of packages the function depends on. E.g. if the function
@@ -65,5 +44,5 @@ func (f Func) Deps() []string {
 type funcs []Func
 
 func (f funcs) Len() int           { return len(f) }
-func (f funcs) Less(i, j int) bool { return f[i].Name < f[j].Name }
+func (f funcs) Less(i, j int) bool { return f[i].Definition < f[j].Definition }
 func (f funcs) Swap(i, j int)      { f[i], f[j] = f[j], f[i] }
