@@ -1,12 +1,10 @@
-package interfaces_test
+package interfacer_test
 
 import (
 	"flag"
 	"fmt"
 	"io"
 	"net/http"
-
-	"github.com/sbward/interfaces"
 )
 
 type ExampleFoo int
@@ -38,7 +36,7 @@ func (*ExampleBaz) E(*[]map[*flag.FlagSet]struct{}, [3]string) {}
 func (*ExampleBaz) F(bool, ...string) {}
 
 func ExampleNew() {
-	i, err := interfaces.New(`github.com/sbward/interfaces.ExampleBaz`)
+	i, err := interfaces.New(`github.com/sbward/interfacer.ExampleBaz`)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -60,8 +58,8 @@ func ExampleNew() {
 	// F(bool, ...string)
 	// Dependencies:
 	// flag
-	// github.com/sbward/interfaces
-	// github.com/sbward/interfaces_test
+	// github.com/sbward/interfacer
+	// github.com/sbward/interfacer_test
 	// io
 	// net/http
 }
@@ -96,7 +94,7 @@ func ExampleNewWithOptions() {
 func ExampleFunc_String() {
 	f := interfaces.Func{
 		Definition: "Close() error",
-		Outs:       []interfaces.Type{{Name: "error"}},
+		Outs:       []interfaces.Type{{}},
 	}
 	fmt.Println(f)
 	// Output: Close() error

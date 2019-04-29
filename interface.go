@@ -1,4 +1,4 @@
-package interfaces
+package interfacer
 
 import (
 	"errors"
@@ -143,11 +143,9 @@ func buildInterfaceForPkg(pkg *loader.PackageInfo, opts *Options) (Interface, er
 		}
 		for i := range fn.Ins {
 			fn.Ins[i] = newType(ins.At(i))
-			fixup(&fn.Ins[i], opts.Query)
 		}
 		for i := range fn.Outs {
 			fn.Outs[i] = newType(outs.At(i))
-			fixup(&fn.Outs[i], opts.Query)
 		}
 
 		inter = append(inter, fn)

@@ -1,6 +1,6 @@
-// Package interfaces provides functionality for parsing and building interface
+// Package interfacer provides functionality for parsing and building interface
 // type models for simple code generation purposes.
-package interfaces
+package interfacer
 
 // BUG(rjeczalik): Does not work with recursive types.
 

@@ -1,9 +1,9 @@
-package interfaces_test
+package interfacer_test
 
 import (
 	"testing"
 
-	"github.com/sbward/interfaces"
+	"github.com/sbward/interfacer"
 )
 
 func TestParseQuery(t *testing.T) {
@@ -12,8 +12,8 @@ func TestParseQuery(t *testing.T) {
 			Package:  "os",
 			TypeName: "File",
 		},
-		`github.com/sbward/interfaces.Query`: {
-			Package:  "github.com/sbward/interfaces",
+		`github.com/sbward/interfacer.Query`: {
+			Package:  "github.com/sbward/interfacer",
 			TypeName: "Query",
 		},
 	}

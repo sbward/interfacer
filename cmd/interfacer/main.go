@@ -1,4 +1,4 @@
-// Command interfaces
+// Command interfacer
 package main
 
 import (
@@ -8,7 +8,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/sbward/interfaces"
+	"github.com/sbward/interfacer"
 )
 
 var (
@@ -37,7 +37,7 @@ type vars struct {
 	InterfaceName string
 	Type          string
 	Deps          []string
-	Interface     interfaces.Interface
+	Interface     interfacer.Interface
 }
 
 func nonil(err ...error) error {
@@ -62,15 +62,15 @@ func main() {
 	if *output == "" {
 		die("empty -o flag value; see -help for details")
 	}
-	q, err := interfaces.ParseQuery(*query)
+	q, err := interfacer.ParseQuery(*query)
 	if err != nil {
 		die(err)
 	}
-	opts := &interfaces.Options{
+	opts := &interfacer.Options{
 		Query:      q,
 		Unexported: *all,
 	}
-	i, err := interfaces.NewWithOptions(opts)
+	i, err := interfacer.NewWithOptions(opts)
 	if err != nil {
 		die(err)
 	}

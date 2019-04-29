@@ -1,31 +1,14 @@
-package interfaces
+package interfacer
 
 import (
 	"fmt"
 	"go/types"
-	"path"
-	"strings"
 )
 
 // Type is a simple representation of a single parameter type.
 type Type struct {
-	Name        string `json:"name,omitempty"`        // type name
-	Package     string `json:"package,omitempty"`     // package name the type is defined in; empty for builtin
-	ImportPath  string `json:"importPath,omitempty"`  // import path of the package
-	IsPointer   bool   `json:"isPointer,omitempty"`   // whether the parameter is a pointer
-	IsComposite bool   `json:"isComposite,omitempty"` // whether the type is map, slice, chan or array
-	IsFunc      bool   `json:"isFunc,omitempty"`      // whether the type if function
-}
-
-// String gives Go code representation of the type.
-func (typ Type) String() (s string) {
-	if typ.IsPointer {
-		s = "*"
-	}
-	if !typ.IsComposite && typ.Package != "" {
-		s += typ.Package + "."
-	}
-	return s + typ.Name
+	Package    string `json:"package,omitempty"`    // package name the type is defined in; empty for builtin
+	ImportPath string `json:"importPath,omitempty"` // import path of the package
 }
 
 func newType(v *types.Var) (typ Type) {
@@ -46,21 +29,10 @@ func (typ *Type) setFromType(t types.Type, depth int, orig types.Type) {
 		panic("recursive types not supported: " + orig.String())
 	}
 	switch t := t.(type) {
-	case *types.Basic:
-		typ.setFromBasic(t)
-	case *types.Interface:
-		typ.setFromInterface(t)
-	case *types.Struct:
-		typ.setFromStruct(t)
+	case *types.Basic, *types.Interface, *types.Struct, *types.Signature:
 	case *types.Named:
 		typ.setFromNamed(t)
-	case *types.Signature:
-		typ.IsFunc = true
-		typ.setFromSignature(t)
 	case *types.Pointer:
-		if depth == 0 {
-			typ.IsPointer = true
-		}
 		typ.setFromType(t.Elem(), depth+1, orig)
 	case *types.Map:
 		typ.setFromComposite(t, depth, orig)
@@ -72,34 +44,7 @@ func (typ *Type) setFromType(t types.Type, depth int, orig types.Type) {
 	}
 }
 
-func (typ *Type) setFromBasic(t *types.Basic) {
-	if typ.Name == "" {
-		typ.Name = t.Name()
-	}
-}
-
-func (typ *Type) setFromInterface(t *types.Interface) {
-	if typ.Name == "" {
-		typ.Name = t.String()
-	}
-}
-
-func (typ *Type) setFromStruct(t *types.Struct) {
-	if typ.Name == "" {
-		typ.Name = t.String()
-	}
-}
-
-func (typ *Type) setFromSignature(t *types.Signature) {
-	if typ.Name == "" {
-		typ.Name = t.String()
-	}
-}
-
 func (typ *Type) setFromNamed(t *types.Named) {
-	if typ.Name == "" {
-		typ.Name = t.Obj().Name()
-	}
 	if typ.Package != "" || typ.ImportPath != "" {
 		return
 	}
@@ -110,22 +55,5 @@ func (typ *Type) setFromNamed(t *types.Named) {
 }
 
 func (typ *Type) setFromComposite(t compositeType, depth int, orig types.Type) {
-	typ.IsComposite = true
-	if typ.Name == "" {
-		typ.Name = t.String()
-	}
 	typ.setFromType(t.Elem(), depth+1, orig)
-}
-
-func fixup(typ *Type, q *Query) {
-	// Hacky fixup for renaming:
-	//
-	//   GeoAdd(string, []*github.com/go-redis/redis.GeoLocation) *redis.IntCmd
-	//
-	// to:
-	//
-	//   GeoAdd(string, []*redis.GeoLocation) *redis.IntCmd
-	//
-	// Should be fixed layer below, in type.go.
-	typ.Name = strings.Replace(typ.Name, q.Package, path.Base(q.Package), -1)
 }

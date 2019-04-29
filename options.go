@@ -1,4 +1,4 @@
-package interfaces
+package interfacer
 
 import (
 	"errors"
@@ -45,10 +45,6 @@ type Options struct {
 	Query      *Query         // a named type
 	Context    *build.Context // build context; see go/build godoc for details
 	Unexported bool           // whether to include unexported methods
-
-	CSVHeader  []string
-	CSVRecord  []string
-	TimeFormat string
 }
 
 func (opts *Options) context() *build.Context {
